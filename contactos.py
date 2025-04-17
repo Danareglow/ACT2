@@ -18,7 +18,6 @@ class Contacto:
         if telefono:
             self.telefono = telefono
 
-
 class GestorContactos:
     def __init__(self):
         self.contactos = []
@@ -42,7 +41,6 @@ class GestorContactos:
                 resultados.append(contacto)
             elif criterio == "correo" and valor.lower() in contacto.correo.lower():
                 resultados.append(contacto)
-            # Añade más criterios si es necesario...
         
         if resultados:
             print(f"\n🔍 Resultados ({len(resultados)}):")
@@ -50,19 +48,35 @@ class GestorContactos:
                 print(contacto)
         else:
             print("🔎 No hay resultados.")
+    
+    # --- NUEVO MÉTODO PARA ACTUALIZAR ---
+    def actualizar_contacto(self, correo):
+        for contacto in self.contactos:
+            if contacto.correo == correo:
+                print("\n🔄 Ingrese los nuevos datos (deje vacío para mantener el actual):")
+                nombre = input(f"Nuevo nombre ({contacto.nombre}): ") or contacto.nombre
+                apellido = input(f"Nuevo apellido ({contacto.apellido}): ") or contacto.apellido
+                nuevo_correo = input(f"Nuevo correo ({contacto.correo}): ") or contacto.correo
+                telefono = input(f"Nuevo teléfono ({contacto.telefono}): ") or contacto.telefono
+                
+                contacto.actualizar(nombre, apellido, nuevo_correo, telefono)
+                print("✅ Contacto actualizado.")
+                return
+        print("⚠️ No se encontró el contacto.")
 
 def mostrar_menu():
     print("\n--- MENÚ GESTOR DE CONTACTOS ---")
     print("1. Agregar contacto")
     print("2. Eliminar contacto")
     print("3. Buscar contacto")
-    print("4. Salir")
+    print("4. Actualizar contacto")  # --- NUEVA OPCIÓN ---
+    print("5. Salir")
 
 def main():
     gestor = GestorContactos()
     while True:
         mostrar_menu()
-        opcion = input("Selecciona una opción (1-4): ")
+        opcion = input("Selecciona una opción (1-5): ")
         
         if opcion == "1":
             print("\n📝 Nuevo contacto:")
@@ -81,7 +95,11 @@ def main():
             valor = input("Valor a buscar: ")
             gestor.buscar_contacto(criterio, valor)
         
-        elif opcion == "4":
+        elif opcion == "4":  # --- NUEVA ACCIÓN ---
+            correo = input("\nIngresa el correo del contacto a actualizar: ")
+            gestor.actualizar_contacto(correo)
+        
+        elif opcion == "5":
             print("👋 ¡Hasta luego!")
             break
         
